@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html lang="fr">
 <head>
@@ -10,7 +9,8 @@
 <body>
     <h1>📚 Jeux H5P - Intelligence Artificielle</h1>
     <p>Sélectionnez un fichier H5P à afficher :</p>
-    <select id="h5pSelector" onchange="loadH5P()">
+    
+    <select id="h5pSelector">
         <option value="">-- Choisissez un jeu --</option>
         <option value="quiz_qcm.h5p">Quiz à choix multiples (QCM)</option>
         <option value="texte_a_trous.h5p">Texte à trous</option>
@@ -19,17 +19,32 @@
         <option value="memory_game.h5p">Memory (Concepts & Définitions)</option>
     </select>
 
+    <button onclick="loadH5P()">Afficher</button>
+
     <div id="h5p-container" style="margin-top: 20px;"></div>
 
     <script>
         function loadH5P() {
             const file = document.getElementById("h5pSelector").value;
-            if (file) {
-                document.getElementById("h5p-container").innerHTML = "";
-                const options = { h5pJsonPath: file, frameJs: true, frameCss: true };
-                new H5PStandalone.H5P(document.getElementById("h5p-container"), options);
+            const container = document.getElementById("h5p-container");
+
+            if (!file) {
+                container.innerHTML = "<p style='color: red;'>Veuillez sélectionner un fichier H5P.</p>";
+                return;
             }
+
+            container.innerHTML = "<p>Chargement du fichier H5P...</p>";
+
+            setTimeout(() => {
+                container.innerHTML = "";
+                new H5PStandalone.H5P(container, {
+                    h5pJsonPath: file,
+                    frameJs: true,
+                    frameCss: true
+                });
+            }, 1000);
         }
     </script>
 </body>
 </html>
+
